@@ -26,6 +26,9 @@ export default {
     cellHeight: {
       type: Number
     },
+    divWidth: {
+      type: Number,
+    },
     rowCount: {
       type: Number
     },
@@ -41,7 +44,7 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       animate: true,
       dragging: false,
@@ -60,17 +63,17 @@ export default {
       zIndex: 1
     }
   },
-  mounted () {
+  mounted() {
     this.$refs.self
-      .addEventListener('transitionend', (event) => {
-        if (!this.dragging) {
-          this.zIndex = 1
-        }
-      }, false)
+        .addEventListener('transitionend', (event) => {
+          if (!this.dragging) {
+            this.zIndex = 1
+          }
+        }, false)
   },
   computed: {
-    className () {
-      let { animate, dragging } = this
+    className() {
+      let {animate, dragging} = this
 
       return [
         'v-grid-item-wrapper',
@@ -80,8 +83,8 @@ export default {
         }
       ]
     },
-    style () {
-      let { zIndex, cellWidth, cellHeight, top, left } = this
+    style() {
+      let {zIndex, cellWidth, cellHeight, top, left} = this
 
       return {
         zIndex,
@@ -91,25 +94,25 @@ export default {
       }
     },
 
-    left () {
+    left() {
       return this.dragging
-        ? this.shiftX
-        : this.rowShift + (this.sort % this.rowCount) * this.cellWidth
+          ? this.shiftX
+          : this.rowShift + (this.sort % this.rowCount) * this.cellWidth
     },
 
-    top () {
+    top() {
       return this.dragging
-        ? this.shiftY
-        : Math.floor(this.sort / this.rowCount) * this.cellHeight
+          ? this.shiftY
+          : Math.floor(this.sort / this.rowCount) * this.cellHeight
     }
   },
   methods: {
-    wrapEvent (event) {
-      let { index, sort } = this
-      return { event, index, sort }
+    wrapEvent(event) {
+      let {index, sort} = this
+      return {event, index, sort}
     },
 
-    dragStart (event) {
+    dragStart(event) {
       let e = event.touches ? event.touches[0] : event
 
       this.zIndex = 2
@@ -129,7 +132,7 @@ export default {
       this.$emit('dragstart', this.wrapEvent(event))
     },
 
-    drag (event) {
+    drag(event) {
       let e = event.touches ? event.touches[0] : event
 
       let distanceX = e.pageX - this.mouseMoveStartX
@@ -161,7 +164,7 @@ export default {
       this.$emit('drag', $event)
     },
 
-    mousedown (event) {
+    mousedown(event) {
       if (this.draggable) {
         this.timer = setTimeout(() => {
           this.dragStart(event)
@@ -172,13 +175,13 @@ export default {
       }
     },
 
-    documentMouseMove (event) {
+    documentMouseMove(event) {
       if (this.draggable && this.dragging) {
         this.drag(event)
       }
     },
 
-    documentMouseUp (event) {
+    documentMouseUp(event) {
       if (this.timer) {
         clearTimeout(this.timer)
         this.timer = null
@@ -204,11 +207,9 @@ export default {
 
       let $event = this.wrapEvent(event)
 
-      if (distance < CLICK_PIXEL_DISTANCE) {
-        this.$emit('click', $event)
+      if (distance > CLICK_PIXEL_DISTANCE) {
+        this.$emit('dragend', $event)
       }
-
-      this.$emit('dragend', $event)
     }
   }
 }

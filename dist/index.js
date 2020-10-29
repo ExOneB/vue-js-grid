@@ -208,6 +208,10 @@
                     type: Number,
                     default: 80
                 },
+                divWidth: {
+                    type: Number,
+                    default: 80
+                },
                 draggable: {
                     type: Boolean,
                     default: !1
@@ -247,7 +251,7 @@
             },
             computed: {
                 gridResponsiveWidth: function() {
-                    return this.gridWidth < 0 ? this.windowWidth : Math.min(this.windowWidth, this.gridWidth);
+                    return this.gridWidth < 0 ? this.divWidth : Math.min(this.divWidth, this.gridWidth);
                 },
                 height: function() {
                     return Math.ceil(this.list.length / this.rowCount) * this.cellHeight;
@@ -347,6 +351,9 @@
                     type: Number
                 },
                 cellHeight: {
+                    type: Number
+                },
+                divWidth: {
                     type: Number
                 },
                 rowCount: {
@@ -458,7 +465,7 @@
                     document.removeEventListener("touchmove", this.documentMouseMove), document.removeEventListener("mouseup", this.documentMouseUp), 
                     document.removeEventListener("touchend", this.documentMouseUp);
                     var $event = this.wrapEvent(event);
-                    distance < 4 && this.$emit("click", $event), this.$emit("dragend", $event);
+                    distance > 4 && this.$emit("dragend", $event);
                 }
             }
         };
@@ -529,7 +536,7 @@
                             "row-count": _vm.rowCount,
                             "cell-width": _vm.cellWidth,
                             "cell-height": _vm.cellHeight,
-                            "window-width": _vm.windowWidth,
+                            "window-width": _vm.divWidth,
                             "row-shift": _vm.rowShift
                         },
                         on: {
@@ -546,7 +553,7 @@
                             _vm.removeItem(v);
                         }
                     }) ], 2);
-                }));
+                }), 1);
             },
             staticRenderFns: []
         };

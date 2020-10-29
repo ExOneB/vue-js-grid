@@ -9,7 +9,7 @@
               :row-count="rowCount"
               :cell-width="cellWidth"
               :cell-height="cellHeight"
-              :window-width="windowWidth"
+              :window-width="divWidth"
               :row-shift="rowShift"
               @dragstart="onDragStart"
               @dragend="onDragEnd"
@@ -48,6 +48,10 @@ export default {
       default: 80,
     },
     cellHeight: {
+      type: Number,
+      default: 80
+    },
+    divWidth: {
       type: Number,
       default: 80
     },
@@ -90,9 +94,9 @@ export default {
   computed: {
     gridResponsiveWidth () {
       if (this.gridWidth < 0) {
-        return this.windowWidth
+        return this.divWidth
       } else {
-        return Math.min(this.windowWidth, this.gridWidth)
+        return Math.min(this.divWidth, this.gridWidth)
       }
     },
 
